@@ -15,12 +15,19 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Moovbe',
       theme: ThemeData(
-       
+        elevatedButtonTheme: const ElevatedButtonThemeData(
+          style: ButtonStyle(
+            shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(7)),
+              ),
+            ),
+            backgroundColor: MaterialStatePropertyAll(Colors.red),
+          ),
+        ),
         useMaterial3: true,
       ),
       home: const Splash(),
     );
   }
 }
-
-

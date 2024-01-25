@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'home.dart';
+
 class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);
   final TextEditingController nameController = TextEditingController();
@@ -93,7 +95,7 @@ class Login extends StatelessWidget {
         width: double.infinity,
         margin: const EdgeInsets.all(20),
         child: ElevatedButton(
-          style: ButtonStyle(
+          style: const ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(
               Colors.transparent,
             ),
@@ -102,10 +104,11 @@ class Login extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            final email = nameController.text.trim();
-            //  final password=passwordController.text.trim();
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('email:$email ')));
+        Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()),
+            );
+          
           },
           child: const Text(
             "Login",
