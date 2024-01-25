@@ -1,7 +1,8 @@
-import 'dart:math';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import 'home.dart';
 
 class Login extends StatelessWidget {
@@ -103,12 +104,13 @@ class Login extends StatelessWidget {
               Colors.transparent,
             ),
           ),
-          onPressed: () {
-        Navigator.push(
+          onPressed: () async{
+           
+            
+              Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Home()),
             );
-          
           },
           child: const Text(
             "Login",
@@ -122,6 +124,8 @@ class Login extends StatelessWidget {
       ),
     );
   }
+
+
 }
 
 class DrawPainter extends CustomPainter {

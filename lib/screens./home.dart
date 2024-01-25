@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:moovbe/screens./bus_manage_screen.dart';
+import 'package:moovbe/screens./driver_screen.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -23,6 +26,9 @@ class Home extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               TabWidget(
+                onTap: () {
+                log('ssss');
+                },
                 title: 'Bus',
                 subtitle: 'Manage Your Buses',
                 color: Colors.red,
@@ -36,6 +42,13 @@ class Home extends StatelessWidget {
                     )),
               ),
               TabWidget(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const DriverScreen(),
+                    ),
+                  );
+                },
                 title: 'Driver',
                 subtitle: 'Manage Your Driver',
                 color: Colors.black87,
@@ -93,11 +106,11 @@ class Home extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                         /* Navigator.of(context).push(
+                          Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => const BusManageScreen(),
                             ),
-                          );*/
+                          );
                         },
                         child: const Text(
                           'Manage',
@@ -127,46 +140,51 @@ class TabWidget extends StatelessWidget {
     required this.subtitle,
     required this.image,
     required this.color,
+    required this.onTap,
   });
   final String title;
   final String subtitle;
   final Widget image;
   final Color color;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              color: color, borderRadius: BorderRadius.circular(10)),
-          height: 176,
-          width: 158,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.w700),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400),
-              ),
-            ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: color, borderRadius: BorderRadius.circular(10)),
+            height: 176,
+            width: 158,
           ),
-        ),
-        image
-      ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400),
+                ),
+              ],
+            ),
+          ),
+          image
+        ],
+      ),
     );
   }
 }
