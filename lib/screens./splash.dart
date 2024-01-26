@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:moovbe/screens./home.dart';
 import 'package:moovbe/screens./login.dart';
 
 class Splash extends StatelessWidget {
