@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moovbe/bloc/bus_bloc/bus_bloc.dart';
 
-import 'package:moovbe/screens./splash.dart';
+import 'package:moovbe/application/screens./splash.dart';
 
-import 'bloc/auth_bloc/auth_bloc.dart';
+import 'application/screens./driver/bloc/driver_bloc.dart';
+import 'application/screens./home_page/bus_bloc/bus_bloc.dart';
+import 'application/screens./login/auth_bloc/auth_bloc.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +22,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => AuthBloc()),
         BlocProvider(create: (_) => BusBloc()),
+        BlocProvider(create: (_) => DriverBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

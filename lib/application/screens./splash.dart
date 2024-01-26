@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moovbe/screens./login.dart';
+import 'package:moovbe/application/screens./login/widgets/login.dart';
 
 class Splash extends StatelessWidget {
   const Splash({Key? key}) : super(key: key);

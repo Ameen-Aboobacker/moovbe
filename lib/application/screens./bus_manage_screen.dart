@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:moovbe/models/bus_model.dart';
+
+import '../../data/bus/bus_model.dart';
+
 
 class BusManageScreen extends StatelessWidget {
   const BusManageScreen({Key? key, required this.bus}) : super(key: key);
- final Bus bus;
+  final Bus bus;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +21,7 @@ class BusManageScreen extends StatelessWidget {
             width: 335,
             child: Row(
               children: [
-                 Expanded(
+                Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                     child: Column(
@@ -53,13 +55,47 @@ class BusManageScreen extends StatelessWidget {
           ),
           const SizedBox(height: 60),
           Container(
-            width: 283,
-            height: 487,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(13),
-                border: Border.all(color: Colors.black26)),
-            margin: const EdgeInsets.only(left: 25),
-          )
+              width: 283,
+              height: 487,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(13),
+                  border: Border.all(color: Colors.black26)),
+              margin: const EdgeInsets.only(left: 25),
+              child: bus.type == 'AC'
+                  ? GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4),
+                      itemBuilder: (context, index) {
+                        if (index > 3) {
+                          return Center(
+                            child: Container(
+                              height: 20,
+                              width: 20,
+                              color: Colors.blue,
+                            ),
+                          );
+                        }
+                        if (index == 3) {
+                          return Center(
+                            child: Container(
+                              height: 20,
+                              width: 20,
+                              color: Colors.black,
+                            ),
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                      itemCount: 40,
+                    )
+                  : Center(
+                      child: Container(
+                        height: 16,
+                        width: 16,
+                        color: Colors.blue,
+                      ),
+                    )),
         ],
       ),
     );
