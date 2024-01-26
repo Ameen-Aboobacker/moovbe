@@ -8,11 +8,12 @@ import '../data/driver_model/driver_model.dart';
 class ApiServices {
   static login(String username, String password) async {
     final response = await http.post(
-        Uri.parse('https://flutter-api.noviindus.in/api/LoginApi'),
-        body: {
-          'username': username,
-          'password': password,
-        });
+      Uri.parse('$baseUrl/LoginApi'),
+      body: {
+        'username': username,
+        'password': password,
+      },
+    );
     if (response.statusCode == 200) {
       final authData = jsonDecode(response.body);
       final token = authData['access_token'];
@@ -22,7 +23,7 @@ class ApiServices {
 
   static fetchBusData() async {
     final response = await http.get(
-      Uri.parse('https://flutter-api.noviindus.in/api/BusListApi'),
+      Uri.parse('$baseUrl/BusListApi'),
       headers: {
         'Authorization': 'Bearer $accessToken',
       },
@@ -37,7 +38,7 @@ class ApiServices {
 
   static fetchDriverData() async {
     final response = await http.get(
-      Uri.parse('https://flutter-api.noviindus.in/api/DriverApi'),
+      Uri.parse('$baseUrl/DriverApi'),
       headers: {
         'Authorization': 'Bearer $accessToken',
       },
@@ -51,16 +52,13 @@ class ApiServices {
   }
 
   static saveDriver(Drivers driver) async {
-    final response = await http.post(
-        Uri.parse('https://flutter-api.noviindus.in/api/DriverApi'),
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
-        body: {
-          'name': driver.name,
-          'mobile': driver.mobile,
-          'license_no': driver.licenseNo
-        });
+    final response = await http.post(Uri.parse('$baseUrl/DriverApi'), headers: {
+      'Authorization': 'Bearer $accessToken',
+    }, body: {
+      'name': driver.name,
+      'mobile': driver.mobile,
+      'license_no': driver.licenseNo
+    });
 
     if (response.statusCode == 200) {
       final driverData = jsonDecode(response.body);
@@ -71,7 +69,7 @@ class ApiServices {
 
   static deleteDriver(String driverid) async {
     final response = await http.delete(
-      Uri.parse('https://flutter-api.noviindus.in/api/DriverApi'),
+      Uri.parse('$baseUrl/DriverApi'),
       headers: {'Authorization': 'Bearer $accessToken'},
       body: {'driver_id': driverid},
     );
