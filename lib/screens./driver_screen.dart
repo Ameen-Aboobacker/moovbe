@@ -9,18 +9,18 @@ class DriverScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: IconButton(onPressed: (){
-          Navigator.of(context).pop();
-        }, icon: const Icon(Icons.arrow_back_sharp,color:Colors.white)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back_sharp, color: Colors.white)),
         backgroundColor: Colors.black,
-        title: const Text('Drivers List',style: TextStyle(color:Colors.white)),
+        title:
+            const Text('Drivers List', style: TextStyle(color: Colors.white)),
       ),
-      
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Padding(
-          padding: EdgeInsets.fromLTRB(10, 20, 0,15 ),
+          padding: EdgeInsets.fromLTRB(10, 20, 0, 15),
           child: Text(
             '21 drivers found',
             style: TextStyle(
@@ -84,9 +84,12 @@ class DriverScreen extends StatelessWidget {
         width: double.infinity,
         margin: const EdgeInsets.all(20),
         child: ElevatedButton(
-        
           onPressed: () {
-           Navigator.push(context,MaterialPageRoute(builder: (context) => const AddDriver(),));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddDriver(),
+                ));
           },
           child: const Text(
             "Add Drivers",

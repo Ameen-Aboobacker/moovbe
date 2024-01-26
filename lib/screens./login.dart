@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import '../bloc/auth_bloc/auth_bloc.dart';
+import '../bloc/bus_bloc/bus_bloc.dart';
 import 'home.dart';
 
 class Login extends StatelessWidget {
@@ -15,77 +18,99 @@ class Login extends StatelessWidget {
 
     //GlobalKey<FormState> loginKey=GlobalKey();
     return Scaffold(
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                color: Colors.black,
-                width: size.width,
-                height: 266,
-                child: CustomPaint(painter: DrawPainter()),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) async {
+          if (state is AuthFailure) {}
+          if (state is AuthSuccess) {
+            context.read<BusBloc>().add(
+                  BusFetchData(state.accessToken),
+                );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const Home(),
               ),
-              const Positioned(
-                left: 30,
-                top: 127,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 41,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      'Manage Your Buses And Drivers',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
-            child: Form(
-              child: Column(
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Column(
+            children: [
+              Stack(
                 children: [
-                  TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      filled: true,
-                      label: Center(
-                        child: Text('Enter Username'),
-                      ),
-                    ),
+                  Container(
+                    color: Colors.black,
+                    width: size.width,
+                    height: 266,
+                    child: CustomPaint(painter: DrawPainter()),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    decoration: const InputDecoration(
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      filled: true,
-                      label: Center(
-                        child: Text('Enter Password'),
-                      ),
+                  const Positioned(
+                    left: 30,
+                    top: 127,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Welcome',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 41,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        Text(
+                          'Manage Your Buses And Drivers',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],
               ),
-            ),
-          )
-        ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
+                child: Form(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: nameController,
+                        decoration: const InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          filled: true,
+                          label: Center(
+                            child: Text('Enter Username'),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: passwordController,
+                        decoration: const InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          filled: true,
+                          label: Center(
+                            child: Text('Enter Password'),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          );
+        },
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -104,13 +129,13 @@ class Login extends StatelessWidget {
               Colors.transparent,
             ),
           ),
-          onPressed: () async{
-           
-            
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Home()),
-            );
+          onPressed: () async {
+            context.read<AuthBloc>().add(
+                  AuthRequested(
+                    username: nameController.text.trim(),
+                    password: passwordController.text.trim(),
+                  ),
+                );
           },
           child: const Text(
             "Login",
@@ -124,8 +149,6 @@ class Login extends StatelessWidget {
       ),
     );
   }
-
-
 }
 
 class DrawPainter extends CustomPainter {

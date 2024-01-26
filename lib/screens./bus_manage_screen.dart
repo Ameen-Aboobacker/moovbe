@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:moovbe/models/bus_model.dart';
 
 class BusManageScreen extends StatelessWidget {
-  const BusManageScreen({Key? key}) : super(key: key);
-
+  const BusManageScreen({Key? key, required this.bus}) : super(key: key);
+ final Bus bus;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,23 +19,23 @@ class BusManageScreen extends StatelessWidget {
             width: 335,
             child: Row(
               children: [
-                const Expanded(
+                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Rohith Sharma',
-                          style: TextStyle(
+                          bus.driverName!,
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontSize: 26),
                         ),
                         Text(
-                          'Licn no: PJ5151961616',
-                          style: TextStyle(
+                          bus.driverLicenseNo!,
+                          style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w400,
                               fontSize: 10),

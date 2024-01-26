@@ -1,8 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moovbe/models/bus_model.dart';
 import 'package:moovbe/screens./bus_manage_screen.dart';
 import 'package:moovbe/screens./driver_screen.dart';
+
+import '../bloc/bus_bloc/bus_bloc.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -27,7 +31,7 @@ class Home extends StatelessWidget {
             children: [
               TabWidget(
                 onTap: () {
-                log('ssss');
+                  log('ssss');
                 },
                 title: 'Bus',
                 subtitle: 'Manage Your Buses',
@@ -62,72 +66,107 @@ class Home extends StatelessWidget {
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(10, 25, 0, 0),
-            child: Text(
-              '21 buses found',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: Color.fromARGB(255, 112, 111, 111),
-              ),
-            ),
-          ),
-          Flexible(
-              child: ListView.separated(
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: Material(
-                elevation: 3.0,
-                borderRadius: BorderRadius.circular(10),
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(10)),
-                          color: Colors.black12,
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/listbus.png'))),
-                      width: 79,
-                      height: 73,
-                      margin: const EdgeInsets.only(right: 10),
-                    ),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('KSRTC'),
-                          Text('Swift Scania P-Series'),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const BusManageScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Manage',
-                          style: TextStyle(color: Colors.white),
+          BlocBuilder<BusBloc, BusState>(
+            builder: (context, state) {
+              if (state is BusFetchSuccess) {
+                final busList = state.busModel.bus;
+                return Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 25, 0, 0),
+                        child: Text(
+                          '${busList!.length} buses found',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            color: Color.fromARGB(255, 112, 111, 111),
+                          ),
                         ),
                       ),
+                      BusList(
+                        busList: busList,
+                      )
+                    ],
+                  ),
+                );
+              }
+              return const BusListLoading();
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class BusList extends StatelessWidget {
+  const BusList({
+    super.key,
+    required this.busList,
+  });
+
+  final List<Bus>? busList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: ListView.separated(
+        itemBuilder: (context, index) {
+          final bus = busList![index];
+          final image = 'https://flutter-api.noviindus.in${bus.image}';
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            child: Material(
+              elevation: 3.0,
+              borderRadius: BorderRadius.circular(10),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.horizontal(
+                            left: Radius.circular(10)),
+                        color: Colors.black12,
+                        image: DecorationImage(image: NetworkImage(image))),
+                    width: 79,
+                    height: 73,
+                    margin: const EdgeInsets.only(right: 10),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(bus.name!),
+                        Text(bus.type!),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BusManageScreen(bus: bus),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Manage',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 7,
-            ),
-            itemCount: 10,
-          ))
-        ],
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(
+          height: 7,
+        ),
+        itemCount: 5,
       ),
     );
   }
@@ -184,6 +223,65 @@ class TabWidget extends StatelessWidget {
           ),
           image
         ],
+      ),
+    );
+  }
+}
+
+class BusListLoading extends StatelessWidget {
+  const BusListLoading({
+    super.key,
+    // required this.busList,
+  });
+
+  //final List<Bus>? busList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: ListView.separated(
+        itemBuilder: (context, index) {
+          // final bus = busList[index];
+          /* final image =
+              'https://flutter-api.noviindus.in${bus.image}';*/
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            child: Material(
+              elevation: 3.0,
+              borderRadius: BorderRadius.circular(10),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadius.horizontal(left: Radius.circular(10)),
+                      color: Colors.black12,
+                      /* image: DecorationImage(
+                            image: NetworkImage(image))*/
+                    ),
+                    width: 79,
+                    height: 73,
+                    margin: const EdgeInsets.only(right: 10),
+                  ),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Text(bus.name!),
+                        //Text(bus.type!),
+                      ],
+                    ),
+                  ),
+                
+                ],
+              ),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(
+          height: 7,
+        ),
+        itemCount: 5,
       ),
     );
   }
