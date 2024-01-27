@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 import '../../../../data/bus/bus_model.dart';
-import '../../bus_manage_screen.dart';
+import '../../bus/bus_manage_screen.dart';
 
 class BusList extends StatelessWidget {
   const BusList({
